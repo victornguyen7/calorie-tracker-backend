@@ -3,8 +3,10 @@ package com.vic.caloriestracker.repository;
 import com.vic.caloriestracker.entity.foodItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface foodItemRepository extends JpaRepository<foodItem,Long> {
-        foodItem findByName(String name);
+import java.util.Optional;
 
-        foodItem findById(long id);
+public interface foodItemRepository extends JpaRepository<foodItem,Long> {
+        Optional<foodItem> findByName(String name);
+
+        Optional<foodItem> findById(Long id);
 }

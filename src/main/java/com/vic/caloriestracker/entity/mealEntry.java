@@ -7,6 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 
+import com.vic.caloriestracker.entity.user;
+import com.vic.caloriestracker.entity.foodItem;
+
 @Entity
 public class mealEntry {
     @Column(nullable = false, unique = true)

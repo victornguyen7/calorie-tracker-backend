@@ -3,8 +3,11 @@ package com.vic.caloriestracker.repository;
 import com.vic.caloriestracker.entity.dailyLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface dailyLogRepository extends JpaRepository<dailyLog,Long> {
-        dailyLog findById(long id);
+import java.util.List;
+import java.util.Optional;
 
-        dailyLog findByUserId(long id);
+public interface dailyLogRepository extends JpaRepository<dailyLog,Long> {
+        Optional<dailyLog> findById(Long id);
+
+        List<dailyLog> findByUserId(Long userId);
 }
