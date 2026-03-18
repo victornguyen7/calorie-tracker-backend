@@ -1,4 +1,4 @@
-package com.vic.caloriestracker.food;
+package com.vic.caloriestracker.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

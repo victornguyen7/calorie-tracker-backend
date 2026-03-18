@@ -1,4 +1,4 @@
-package com.vic.caloriestracker.meal;
+package com.vic.caloriestracker.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,8 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import com.vic.caloriestracker.user.user;
-import com.vic.caloriestracker.food.foodItem;
 
 @Entity
 public class mealEntry {

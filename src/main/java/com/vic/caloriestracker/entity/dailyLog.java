@@ -1,4 +1,4 @@
-package com.vic.caloriestracker.log;
+package com.vic.caloriestracker.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import com.vic.caloriestracker.user.user;
+import com.vic.caloriestracker.entity.user;
 
 @Entity
 public class dailyLog {
@@ -36,3 +36,4 @@ public class dailyLog {
         this.totalProtein = totalProtein;
     }
 }
+
