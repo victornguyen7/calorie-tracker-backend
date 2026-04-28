@@ -1,11 +1,11 @@
 package com.vic.caloriestracker.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
+@Table (name = "users")
 public class user {
     @Column(unique = true, nullable = false)
     private @Id @GeneratedValue Long id;
@@ -23,11 +23,11 @@ public class user {
     private int caloriesGoal;
 
     @Column(nullable = false)
-    private int createdAt;
+    private LocalDateTime createdAt;
 
     public user(){}
 
-    public user(String name, String email, String passwordHash, int caloriesGoal, int createdAt) {
+    public user(String name, String email, String passwordHash, int caloriesGoal, LocalDateTime createdAt) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
