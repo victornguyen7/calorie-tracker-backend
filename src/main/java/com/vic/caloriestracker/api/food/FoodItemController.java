@@ -21,6 +21,11 @@ public class FoodItemController {
         this.foodItemService = foodItemService;
     }
 
+    @GetMapping
+    public List<foodItem> getAllFoods() {
+        return foodItemService.findAll();
+    }
+
     @GetMapping("/search")
     public List<foodItem> searchFoods(@RequestParam @NotBlank(message = "Search query is required") String q) {
         return foodItemService.search(q);
