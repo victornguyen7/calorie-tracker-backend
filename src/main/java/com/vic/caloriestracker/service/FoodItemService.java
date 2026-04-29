@@ -15,6 +15,10 @@ public class FoodItemService {
         this.foodItemRepository = foodItemRepository;
     }
 
+    public List<foodItem> findAll() {
+        return foodItemRepository.findAll();
+    }
+
     public List<foodItem> search(String query) {
         return foodItemRepository.findByNameContainingIgnoreCase(query);
     }

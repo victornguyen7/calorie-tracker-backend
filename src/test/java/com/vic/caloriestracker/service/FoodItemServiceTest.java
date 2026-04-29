@@ -26,6 +26,18 @@ class FoodItemServiceTest {
     private FoodItemService foodItemService;
 
     @Test
+    void findAllReturnsAllFoods() {
+        foodItem chicken = createFood("Chicken Breast", 165, 31, 0, 4, "100g");
+        foodItem rice = createFood("Brown Rice", 216, 5, 45, 2, "1 cup cooked");
+        when(foodItemRepository.findAll()).thenReturn(List.of(chicken, rice));
+
+        List<foodItem> result = foodItemService.findAll();
+
+        assertThat(result).containsExactly(chicken, rice);
+        verify(foodItemRepository).findAll();
+    }
+
+    @Test
     void searchReturnsMatchingFoods() {
         foodItem chicken = createFood("Chicken Breast", 165, 31, 0, 4, "100g");
         when(foodItemRepository.findByNameContainingIgnoreCase("chicken"))
