@@ -1,37 +1,39 @@
 package com.vic.caloriestracker.api.food;
 
 import com.vic.caloriestracker.entity.foodItem;
-import com.vic.caloriestracker.repository.foodItemRepository;
+import com.vic.caloriestracker.service.FoodItemService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/foods")
+@Validated
 public class FoodItemController {
 
-    private final foodItemRepository foodItemRepository;
+    private final FoodItemService foodItemService;
 
-    public FoodItemController(foodItemRepository foodItemRepository) {
-        this.foodItemRepository = foodItemRepository;
+    public FoodItemController(FoodItemService foodItemService) {
+        this.foodItemService = foodItemService;
     }
 
-    // GET all food items
-    @GetMapping
-    public List<foodItem> getAllFoods() {
-        return foodItemRepository.findAll();
-    }
-
-    // GET food items by search query
     @GetMapping("/search")
-    public List<foodItem> searchFoods(@RequestParam String q) {
-        return foodItemRepository.findByNameContainingIgnoreCase(q);
+    public List<foodItem> searchFoods(@RequestParam @NotBlank(message = "Search query is required") String q) {
+        return foodItemService.search(q);
     }
 
-    // GET single food item by id
     @GetMapping("/{id}")
     public foodItem getFoodById(@PathVariable Long id) {
-        return foodItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Food not found with id: " + id));
+        return foodItemService.findById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public foodItem createFood(@Valid @RequestBody foodItem item) {
+        return foodItemService.save(item);
     }
 }
