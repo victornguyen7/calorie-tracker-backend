@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,10 +66,11 @@ class FoodItemServiceTest {
     void findByIdThrowsWhenFoodDoesNotExist() {
         when(foodItemRepository.findById(99L)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> foodItemService.findById(99L));
 
-        assertThat(exception.getMessage()).isEqualTo("Food not found with id: 99");
+        assertThat(exception.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(exception.getReason()).isEqualTo("Food not found with id: 99");
     }
 
     @Test

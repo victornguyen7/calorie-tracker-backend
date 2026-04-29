@@ -2,7 +2,9 @@ package com.vic.caloriestracker.service;
 
 import com.vic.caloriestracker.entity.foodItem;
 import com.vic.caloriestracker.repository.foodItemRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,7 +27,8 @@ public class FoodItemService {
 
     public foodItem findById(Long id) {
         return foodItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Food not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Food not found with id: " + id));
     }
 
     public foodItem save(foodItem item) {
