@@ -6,7 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 public class foodItem {
     @Column(nullable = false, unique = true, name = "id")
@@ -47,59 +51,4 @@ public class foodItem {
         this.fats = fats;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCalories(int calories) {
-        this.calories = calories;
-    }
-
-    public void setProtein(int protein) {
-        this.protein = protein;
-    }
-
-    public void setCarbs(int carbs) {
-        this.carbs = carbs;
-    }
-
-    public void setFats(int fats) {
-        this.fats = fats;
-    }
-
-    public void setServingSize(String servingSize) {
-        this.servingSize = servingSize;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getCalories() {
-        return calories;
-    }
-
-    public int getProtein() {
-        return protein;
-    }
-
-    public int getCarbs() {
-        return carbs;
-    }
-
-    public int getFats() {
-        return fats;
-    }
-
-    public String getServingSize() {
-        return servingSize;
-    }
 }

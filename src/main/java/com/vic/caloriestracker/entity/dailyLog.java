@@ -8,7 +8,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 
 import com.vic.caloriestracker.entity.user;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 public class dailyLog {
     @Column(nullable = false, unique = true)
@@ -20,7 +24,7 @@ public class dailyLog {
     private user userId;
 
     @Column(nullable = false)
-    private int date; // Format: YYYYMMDD
+    private int date;
 
     @Column(nullable = false)
     private int totalCalories;
@@ -37,43 +41,4 @@ public class dailyLog {
         this.totalProtein = totalProtein;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public user getUserId() {
-        return userId;
-    }
-
-    public void setUserId(user userId) {
-        this.userId = userId;
-    }
-
-    public int getDate() {
-        return date;
-    }
-
-    public void setDate(int date) {
-        this.date = date;
-    }
-
-    public int getTotalCalories() {
-        return totalCalories;
-    }
-
-    public void setTotalCalories(int totalCalories) {
-        this.totalCalories = totalCalories;
-    }
-
-    public int getTotalProtein() {
-        return totalProtein;
-    }
-
-    public void setTotalProtein(int totalProtein) {
-        this.totalProtein = totalProtein;
-    }
 }
