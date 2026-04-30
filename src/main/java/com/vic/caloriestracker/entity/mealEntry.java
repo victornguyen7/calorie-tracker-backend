@@ -42,4 +42,52 @@ public class mealEntry {
         this.mealType = mealType;
         this.loggedAt = loggedAt;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public user getUserId() {
+        return userId;
+    }
+
+    public void setUserId(user userId) {
+        this.userId = userId;
+    }
+
+    public foodItem getFoodItem() {
+        return foodItem;
+    }
+
+    public void setFoodItem(foodItem foodItem) {
+        this.foodItem = foodItem;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getMealType() {
+        return mealType;
+    }
+
+    public void setMealType(String mealType) {
+        this.mealType = mealType;
+    }
+
+    public int getLoggedAt() {
+        return loggedAt;
+    }
+
+    public void setLoggedAt(int loggedAt) {
+        this.loggedAt = loggedAt;
+    }
 }

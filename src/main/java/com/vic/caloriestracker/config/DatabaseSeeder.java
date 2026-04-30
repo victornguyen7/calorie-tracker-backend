@@ -1,23 +1,32 @@
 package com.vic.caloriestracker.config;
 
 import com.vic.caloriestracker.entity.foodItem;
+import com.vic.caloriestracker.entity.user;
 import com.vic.caloriestracker.repository.foodItemRepository;
+import com.vic.caloriestracker.repository.userRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final foodItemRepository foodItemRepository;
+    private final userRepository userRepository;
 
-    public DatabaseSeeder(foodItemRepository foodItemRepository) {
+    public DatabaseSeeder(foodItemRepository foodItemRepository, userRepository userRepository) {
         this.foodItemRepository = foodItemRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        if (userRepository.count() == 0) {
+            userRepository.save(new user("Demo User", "demo@example.com", "demo-password", 2000, LocalDateTime.now()));
+            System.out.println("Seeded demo user successfully.");
+        }
 
         // Only seed if the table is empty — prevents duplicate data on every restart
         if (foodItemRepository.count() > 0) {

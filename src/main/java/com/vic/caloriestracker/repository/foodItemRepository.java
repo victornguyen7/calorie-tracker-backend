@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
-import java.util.Optional;
-
 public interface foodItemRepository extends JpaRepository<foodItem,Long> {
     List<foodItem> findByNameContainingIgnoreCase(String name);
 }

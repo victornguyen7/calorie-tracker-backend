@@ -1,9 +1,13 @@
 package com.vic.caloriestracker.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
 @Table (name = "users")
 public class user {
@@ -34,4 +38,5 @@ public class user {
         this.caloriesGoal = caloriesGoal;
         this.createdAt = createdAt;
     }
+
 }

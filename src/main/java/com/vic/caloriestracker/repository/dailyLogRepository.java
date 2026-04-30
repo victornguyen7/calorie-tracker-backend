@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface dailyLogRepository extends JpaRepository<dailyLog,Long> {
-        Optional<dailyLog> findById(Long id);
+        List<dailyLog> findByUserId_Id(Long userId);
 
-        List<dailyLog> findByUserId(Long userId);
+        Optional<dailyLog> findByUserId_IdAndDate(Long userId, int date);
 }
