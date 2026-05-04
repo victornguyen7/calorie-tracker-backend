@@ -1,0 +1,292 @@
+{
+  "info": {
+    "name": "Calories Tracker API",
+    "description": "Day 14 API testing collection for health, foods, meals, daily logs, calorie summary, and UMass menu endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "userId",
+      "value": "1"
+    },
+    {
+      "key": "foodId",
+      "value": "1"
+    },
+    {
+      "key": "mealId",
+      "value": "1"
+    },
+    {
+      "key": "dateInt",
+      "value": "20260504"
+    },
+    {
+      "key": "dateIso",
+      "value": "2026-05-04"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/"
+          }
+        },
+        {
+          "name": "GET unknown endpoint - expect 404",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/not-real"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Foods",
+      "item": [
+        {
+          "name": "GET /api/foods",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/foods"
+          }
+        },
+        {
+          "name": "GET /api/foods/search?q=chicken",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/foods/search?q=chicken"
+          }
+        },
+        {
+          "name": "GET /api/foods/search missing q - expect 400",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/foods/search"
+          }
+        },
+        {
+          "name": "GET /api/foods/{{foodId}}",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/foods/{{foodId}}"
+          }
+        },
+        {
+          "name": "GET /api/foods/999999 - expect 404",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/foods/999999"
+          }
+        },
+        {
+          "name": "POST /api/foods",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Day 14 Test Food\",\n  \"calories\": 120,\n  \"protein\": 8,\n  \"carbs\": 16,\n  \"fats\": 3,\n  \"servingSize\": \"1 serving\"\n}"
+            },
+            "url": "{{baseUrl}}/api/foods"
+          }
+        },
+        {
+          "name": "POST /api/foods invalid body - expect 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"calories\": -1,\n  \"protein\": 0,\n  \"carbs\": 0,\n  \"fats\": 0,\n  \"servingSize\": \"\"\n}"
+            },
+            "url": "{{baseUrl}}/api/foods"
+          }
+        },
+        {
+          "name": "POST /api/foods missing Content-Type - expect 415",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"No Content Type Food\",\n  \"calories\": 1,\n  \"protein\": 0,\n  \"carbs\": 0,\n  \"fats\": 0,\n  \"servingSize\": \"1 serving\"\n}"
+            },
+            "url": "{{baseUrl}}/api/foods"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Meals",
+      "item": [
+        {
+          "name": "POST /api/meals",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{userId}},\n  \"foodId\": {{foodId}},\n  \"quantity\": 2\n}"
+            },
+            "url": "{{baseUrl}}/api/meals"
+          }
+        },
+        {
+          "name": "POST /api/meals invalid food - expect 404",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{userId}},\n  \"foodId\": 999999,\n  \"quantity\": 1\n}"
+            },
+            "url": "{{baseUrl}}/api/meals"
+          }
+        },
+        {
+          "name": "POST /api/meals invalid quantity - expect 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{userId}},\n  \"foodId\": {{foodId}},\n  \"quantity\": 0\n}"
+            },
+            "url": "{{baseUrl}}/api/meals"
+          }
+        },
+        {
+          "name": "GET /api/meals/today?userId={{userId}}",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/meals/today?userId={{userId}}"
+          }
+        },
+        {
+          "name": "DELETE /api/meals/{{mealId}}",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/meals/{{mealId}}"
+          }
+        },
+        {
+          "name": "DELETE /api/meals/999999 - expect 404",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/meals/999999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Logs + Calories",
+      "item": [
+        {
+          "name": "GET /api/logs/{{dateInt}}?userId={{userId}}",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/logs/{{dateInt}}?userId={{userId}}"
+          }
+        },
+        {
+          "name": "GET /api/logs/{{dateInt}} missing userId - expect 400",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/logs/{{dateInt}}"
+          }
+        },
+        {
+          "name": "GET /api/users/{{userId}}/calorie-summary",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users/{{userId}}/calorie-summary?date={{dateInt}}"
+          }
+        },
+        {
+          "name": "GET /api/users/999999/calorie-summary - expect 404",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users/999999/calorie-summary?date={{dateInt}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "UMass Dining",
+      "item": [
+        {
+          "name": "GET /api/umass/menu",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/umass/menu?hall=worcester&date={{dateIso}}"
+          }
+        },
+        {
+          "name": "GET /api/umass/menu invalid hall - expect 400",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/umass/menu?hall=not-a-hall&date={{dateIso}}"
+          }
+        },
+        {
+          "name": "GET /api/umass/menu/search",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/umass/menu/search?hall=worcester&date={{dateIso}}&q=chicken"
+          }
+        },
+        {
+          "name": "POST /api/umass/menu/save",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"UMass Day 14 Test Food\",\n  \"calories\": 250,\n  \"protein\": 12,\n  \"carbs\": 30,\n  \"fats\": 7,\n  \"servingSize\": \"1 serving\"\n}"
+            },
+            "url": "{{baseUrl}}/api/umass/menu/save"
+          }
+        }
+      ]
+    }
+  ]
+}
