@@ -30,8 +30,7 @@ public class DailyLogService {
 
     @Transactional
     public dailyLog getDailyLog(Long userId, int date) {
-        return dailyLogRepository.findByUserId_IdAndDate(userId, date)
-                .orElseGet(() -> recalculateDailyTotals(userId, date));
+        return recalculateDailyTotals(userId, date);
     }
 
     @Transactional
@@ -48,8 +47,12 @@ public class DailyLogService {
                 .mapToInt(meal -> meal.getFoodItem().getProtein() * meal.getQuantity())
                 .sum();
 
-        dailyLog log = dailyLogRepository.findByUserId_IdAndDate(userId, date)
-                .orElseGet(() -> new dailyLog(foundUser, date, 0, 0));
+        List<dailyLog> existingLogs = dailyLogRepository.findAllByUserId_IdAndDateOrderByIdAsc(userId, date);
+        dailyLog log = existingLogs.isEmpty() ? new dailyLog(foundUser, date, 0, 0) : existingLogs.getFirst();
+        if (existingLogs.size() > 1) {
+            dailyLogRepository.deleteAll(existingLogs.subList(1, existingLogs.size()));
+        }
+
         log.setTotalCalories(totalCalories);
         log.setTotalProtein(totalProtein);
         return dailyLogRepository.save(log);
