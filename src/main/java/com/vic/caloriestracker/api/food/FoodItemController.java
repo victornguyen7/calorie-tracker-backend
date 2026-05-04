@@ -2,6 +2,7 @@ package com.vic.caloriestracker.api.food;
 
 import com.vic.caloriestracker.entity.foodItem;
 import com.vic.caloriestracker.service.FoodItemService;
+import com.vic.caloriestracker.service.FoodSearchService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,11 @@ import java.util.List;
 public class FoodItemController {
 
     private final FoodItemService foodItemService;
+    private final FoodSearchService foodSearchService;
 
-    public FoodItemController(FoodItemService foodItemService) {
+    public FoodItemController(FoodItemService foodItemService, FoodSearchService foodSearchService) {
         this.foodItemService = foodItemService;
+        this.foodSearchService = foodSearchService;
     }
 
     @GetMapping
@@ -28,7 +31,7 @@ public class FoodItemController {
 
     @GetMapping("/search")
     public List<foodItem> searchFoods(@RequestParam @NotBlank(message = "Search query is required") String q) {
-        return foodItemService.search(q);
+        return foodSearchService.search(q);
     }
 
     @GetMapping("/{id}")
