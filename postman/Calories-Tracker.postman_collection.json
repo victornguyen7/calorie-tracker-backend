@@ -1,8 +1,18 @@
 {
   "info": {
     "name": "Calories Tracker API",
-    "description": "Day 14 API testing collection for health, foods, meals, daily logs, calorie summary, and UMass menu endpoints.",
+    "description": "API testing collection for health, auth, foods, meals, daily logs, calorie summary, and UMass menu endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
   },
   "variable": [
     {
@@ -28,6 +38,10 @@
     {
       "key": "dateIso",
       "value": "2026-05-04"
+    },
+    {
+      "key": "token",
+      "value": ""
     }
   ],
   "item": [
@@ -136,6 +150,45 @@
               "raw": "{\n  \"email\": \"postman.user@example.com\",\n  \"password\": \"wrong-password\"\n}"
             },
             "url": "{{baseUrl}}/api/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "JWT Route Security",
+      "item": [
+        {
+          "name": "GET /api/meals/today without token - expect 401",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "url": "{{baseUrl}}/api/meals/today?userId={{userId}}"
+          }
+        },
+        {
+          "name": "GET /api/meals/today with token - expect 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/meals/today?userId={{userId}}"
+          }
+        },
+        {
+          "name": "GET /api/meals/today with bad token - expect 401",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "not-a-real-token",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": "{{baseUrl}}/api/meals/today?userId={{userId}}"
           }
         }
       ]

@@ -5,6 +5,7 @@ import com.vic.caloriestracker.entity.user;
 import com.vic.caloriestracker.repository.foodItemRepository;
 import com.vic.caloriestracker.repository.userRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,18 +16,28 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private final foodItemRepository foodItemRepository;
     private final userRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DatabaseSeeder(foodItemRepository foodItemRepository, userRepository userRepository) {
+    public DatabaseSeeder(foodItemRepository foodItemRepository,
+                          userRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
         this.foodItemRepository = foodItemRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        if (userRepository.count() == 0) {
-            userRepository.save(new user("Demo User", "demo@example.com", "demo-password", 2000, LocalDateTime.now()));
+        userRepository.findByEmail("demo@example.com").ifPresentOrElse(foundUser -> {
+            if (!isBCryptHash(foundUser.getPasswordHash())) {
+                foundUser.setPasswordHash(passwordEncoder.encode("demo-password"));
+                userRepository.save(foundUser);
+                System.out.println("Updated demo user password hash successfully.");
+            }
+        }, () -> {
+            userRepository.save(new user("Demo User", "demo@example.com", passwordEncoder.encode("demo-password"), 2000, LocalDateTime.now()));
             System.out.println("Seeded demo user successfully.");
-        }
+        });
 
         // Only seed if the table is empty — prevents duplicate data on every restart
         if (foodItemRepository.count() > 0) {
@@ -69,5 +80,12 @@ public class DatabaseSeeder implements CommandLineRunner {
         item.setFats(fats);
         item.setServingSize(servingSize);
         return item;
+    }
+
+    private boolean isBCryptHash(String passwordHash) {
+        return passwordHash != null
+                && (passwordHash.startsWith("$2a$")
+                || passwordHash.startsWith("$2b$")
+                || passwordHash.startsWith("$2y$"));
     }
 }

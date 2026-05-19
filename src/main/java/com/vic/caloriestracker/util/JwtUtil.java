@@ -50,6 +50,15 @@ public class JwtUtil {
         return Long.valueOf(parseSubject(token));
     }
 
+    public String extractEmail(String token) {
+        return Jwts.parser()
+                .verifyWith(signingKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("email", String.class);
+    }
+
     private String parseSubject(String token) {
         return Jwts.parser()
                 .verifyWith(signingKey)

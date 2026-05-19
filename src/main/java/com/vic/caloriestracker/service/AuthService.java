@@ -50,11 +50,17 @@ public class AuthService {
         user foundUser = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> invalidCredentials());
 
-        if (!passwordEncoder.matches(request.getPassword(), foundUser.getPasswordHash())) {
-            throw invalidCredentials();
+        if (passwordEncoder.matches(request.getPassword(), foundUser.getPasswordHash())) {
+            return new AuthResponse(jwtUtil.generateToken(foundUser), foundUser);
         }
 
-        return new AuthResponse(jwtUtil.generateToken(foundUser), foundUser);
+        if (request.getPassword().equals(foundUser.getPasswordHash())) {
+            foundUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+            user upgradedUser = userRepository.save(foundUser);
+            return new AuthResponse(jwtUtil.generateToken(upgradedUser), upgradedUser);
+        }
+
+        throw invalidCredentials();
     }
 
     private ResponseStatusException invalidCredentials() {

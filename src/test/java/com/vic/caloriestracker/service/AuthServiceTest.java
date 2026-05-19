@@ -79,6 +79,22 @@ class AuthServiceTest {
     }
 
     @Test
+    void loginUpgradesLegacyPlainTextPassword() {
+        user foundUser = new user("Demo User", "demo@example.com", "password123", 2000, LocalDateTime.now());
+        foundUser.setId(1L);
+        when(userRepository.findByEmail("demo@example.com")).thenReturn(Optional.of(foundUser));
+        when(userRepository.save(any(user.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        var response = newService().login(loginRequest("password123"));
+
+        ArgumentCaptor<user> userCaptor = ArgumentCaptor.forClass(user.class);
+        verify(userRepository).save(userCaptor.capture());
+        assertThat(passwordEncoder.matches("password123", userCaptor.getValue().getPasswordHash())).isTrue();
+        assertThat(response.getUserId()).isEqualTo(1L);
+        assertThat(jwtUtil.validateToken(response.getToken())).isTrue();
+    }
+
+    @Test
     void loginRejectsBadPassword() {
         user foundUser = new user("Demo User", "demo@example.com", passwordEncoder.encode("password123"), 2000, LocalDateTime.now());
         foundUser.setId(1L);
