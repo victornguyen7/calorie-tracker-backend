@@ -359,6 +359,30 @@
       "name": "Logs + Calories",
       "item": [
         {
+          "name": "GET /api/users/me",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users/me"
+          }
+        },
+        {
+          "name": "PUT /api/users/me",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"weight\": 70,\n  \"height\": 175,\n  \"age\": 25,\n  \"activityLevel\": \"moderate\",\n  \"dietaryPreferences\": \"High protein\"\n}"
+            },
+            "url": "{{baseUrl}}/api/users/me"
+          }
+        },
+        {
           "name": "GET /api/logs/{{dateInt}}?userId={{userId}}",
           "request": {
             "method": "GET",

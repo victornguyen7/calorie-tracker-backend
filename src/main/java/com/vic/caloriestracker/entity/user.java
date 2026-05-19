@@ -26,6 +26,17 @@ public class user {
     @Column(nullable = false)
     private int caloriesGoal;
 
+    private Double weight;
+
+    private Double height;
+
+    private Integer age;
+
+    private String activityLevel;
+
+    @Column(length = 1000)
+    private String dietaryPreferences;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 

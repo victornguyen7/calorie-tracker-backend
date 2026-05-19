@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.blankOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,5 +72,43 @@ class SecurityIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token", not(blankOrNullString())))
                 .andExpect(jsonPath("$.email").value("demo@example.com"));
+    }
+
+    @Test
+    void userProfileRoutesUseAuthenticatedUser() throws Exception {
+        user demoUser = userRepository.findByEmail("demo@example.com").orElseThrow();
+        String token = jwtUtil.generateToken(demoUser);
+
+        mockMvc.perform(get("/api/users/me")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(demoUser.getId()))
+                .andExpect(jsonPath("$.email").value("demo@example.com"));
+    }
+
+    @Test
+    void updateProfileRecalculatesCalorieGoal() throws Exception {
+        user demoUser = userRepository.findByEmail("demo@example.com").orElseThrow();
+        String token = jwtUtil.generateToken(demoUser);
+
+        mockMvc.perform(put("/api/users/me")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "weight": 70,
+                                  "height": 175,
+                                  "age": 25,
+                                  "activityLevel": "moderate",
+                                  "dietaryPreferences": "High protein"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.weight").value(70))
+                .andExpect(jsonPath("$.height").value(175))
+                .andExpect(jsonPath("$.age").value(25))
+                .andExpect(jsonPath("$.activityLevel").value("moderate"))
+                .andExpect(jsonPath("$.dietaryPreferences").value("High protein"))
+                .andExpect(jsonPath("$.caloriesGoal").value(2594));
     }
 }
